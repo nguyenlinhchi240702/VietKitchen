@@ -1,0 +1,66 @@
+﻿@model IEnumerable<DoAnCoSo.Models.ShoppingCartItem>
+@using DoAnCoSo.Common
+<div id="partialContainer">
+    @if (Model != null && Model.Any())
+    {
+        double distance = Convert.ToDouble(Session["Distance"]);
+        <h3 class="text-center" style="font-family: 'Dancing Script', cursive; margin-bottom:20px; margin-top:20px;">Thực đơn@*<span style="float:right;"><small>Số loại món ăn: @Model.Count()</small></span>*@</h3>
+        var i = 0;
+        var tongtien = decimal.Zero;
+        var delivery = decimal.Zero;
+        var sum = "0";
+        <div style="border:1px solid #808080;">
+            <table class="table">
+                @foreach (var item in Model)
+                {
+                    tongtien += item.TotalPrice;
+                    <tr>
+                        <td><h5>@item.ProductName x @item.Quantity </h5></td>
+                        <td><h5>@Common.FormatNumber(item.Price, 0) đ</h5></td>
+                    </tr>
+                }
+                <tr>
+                    @if (distance > 0)
+                    {
+                    <tr>
+                        <td><h5>Khoảng cách: </h5></td>
+                        <td><h5> @Common.FormatNumber(distance, 2) Km</h5></td>
+                    </tr>
+}
+                    @if (distance != null && distance > 0 && distance <= 5)
+                    {
+                        var _delivery = @Common.FormatNumber(delivery + 15000, 0);
+
+                        <td><h5>Phí Ship: </h5></td>
+                        <td><h5> @_delivery đ</h5></td>
+                        sum = _delivery;
+                    }
+                    else
+                    {
+                        if (distance != null & distance > 5)
+                        {
+                            var _delivery = @Common.FormatNumber(((distance - 5) * 3000 + 15000), 0);
+
+                            <td><h5>Phí Ship:   </h5></td>
+                            <td><h5> @_delivery đ</h5></td>
+                            sum = _delivery;
+
+                        }
+
+                    }
+                    </tr>
+                    <tr>
+                        <td><h5>Thành tiền:</h5></td>
+                        <td><h5>@Common.FormatNumber(tongtien + decimal.Parse(sum), 0) đ</h5></td>
+                    </tr>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+
+        }
+
+</div>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<DoAnCoSo.Models.EF.OrderDetail>
+
+        @foreach (var inn in Model)
+        {
+            if (inn.Table != null)
+            {
+                <tr>
+
+                    <td>Bàn: @inn.Table.title </td>
+                </tr>
+            }
+        }
+    
+@if (Model != null && Model.Any())
+{
+    int i = 1;
+    <div class="invoice-items" style="margin-top:15px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    if (item.Product != null)
+                    {
+                        <tr>
+                            <td>@item.Product.title</td>
+                            <td>@DoAnCoSo.Common.Common.FormatNumber(item.price, 0) đ</td>
+                            <td>@item.quantity</td>
+                            <td>@DoAnCoSo.Common.Common.FormatNumber((item.price * item.quantity), 0) đ</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        
+        </table>
+        
+    </div>
+    i++;
+}
+<script>
+    function printInvoice() {
+        // Lấy phần tử chứa nội dung hóa đơn
+        var invoiceElement = document.querySelector('.invoice');
+        // Thay thế bằng đường dẫn đúng
+        // Chuyển hướng đến trang in
+
+        // Áp dụng CSS stylesheet cho trang in
+        var stylesheets = document.querySelectorAll('style');
+        stylesheets.forEach(function (stylesheet) {
+            document.head.appendChild(stylesheet.cloneNode(true));
+        });
+
+        // In trang
+        window.print();
+
+        // Xóa CSS stylesheet sau khi in
+        stylesheets.forEach(function (stylesheet) {
+            document.head.removeChild(stylesheet);
+        });
+    }
+</script>
